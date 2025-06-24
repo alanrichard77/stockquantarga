@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ARGA Quant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to right, #0d0d0d, #1a1a2e);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
+        }
+        input, select, button {
+            padding: 10px;
+            margin: 10px 5px;
+            border-radius: 6px;
+            border: none;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ARGA Quant - Análise Financeira Interativa</h1>
+    <input type="text" id="tickers" placeholder="Digite os tickers separados por vírgula">
+    <select id="metodo">
+        <option value="retorno">Retorno</option>
+        <option value="risco">Risco (Volatilidade)</option>
+    </select>
+    <button onclick="calcular()">Calcular</button>
+    <div class="result">
+        <pre id="output"></pre>
+        <div id="grafico"></div>
+    </div>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        function calcular() {
+            const tickers = document.getElementById('tickers').value.split(',').map(x => x.trim());
+            const metodo = document.getElementById('metodo').value;
+            fetch('/calcular', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({tickers, metodo})
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('output').textContent = JSON.stringify(data.dados, null, 2);
+                const graph = JSON.parse(data.grafico);
+                Plotly.newPlot('grafico', graph.data, graph.layout);
+            });
+        }
+    </script>
+</body>
+</html>
