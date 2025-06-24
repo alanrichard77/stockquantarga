@@ -3,55 +3,53 @@
 <html>
 <head>
     <title>ARGA Quant</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(to right, #0d0d0d, #1a1a2e);
-            color: white;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
             font-family: 'Roboto', sans-serif;
+            color: #fff;
             padding: 20px;
         }
         input, select, button {
             padding: 10px;
-            margin: 10px 5px;
+            margin: 5px;
             border-radius: 6px;
             border: none;
             font-size: 16px;
         }
-        .result {
+        .result, .graph {
             margin-top: 20px;
         }
+        h1 { font-size: 24px; }
     </style>
 </head>
 <body>
-    <h1>ARGA Quant - Análise Financeira Interativa</h1>
-    <input type="text" id="tickers" placeholder="Digite os tickers separados por vírgula">
-    <select id="metodo">
-        <option value="retorno">Retorno</option>
-        <option value="risco">Risco (Volatilidade)</option>
-    </select>
-    <button onclick="calcular()">Calcular</button>
+    <h1>ARGA Quant - Web App Financeiro</h1>
+    <form method="post">
+        <input type="text" name="tickers" placeholder="Ex: PETR4,VALE3,WEGE3" required>
+        <input type="date" name="inicio" required>
+        <input type="date" name="fim" required>
+        <select name="tipo">
+            <option value="retorno">Retorno</option>
+            <option value="risco">Risco</option>
+            <option value="comparativo">Comparativo com IBOV</option>
+        </select>
+        <button type="submit">Calcular</button>
+    </form>
+
+    {% if resultado %}
     <div class="result">
-        <pre id="output"></pre>
-        <div id="grafico"></div>
+        <h2>Resultado:</h2>
+        <pre>{{ resultado }}</pre>
     </div>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script>
-        function calcular() {
-            const tickers = document.getElementById('tickers').value.split(',').map(x => x.trim());
-            const metodo = document.getElementById('metodo').value;
-            fetch('/calcular', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({tickers, metodo})
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('output').textContent = JSON.stringify(data.dados, null, 2);
-                const graph = JSON.parse(data.grafico);
-                Plotly.newPlot('grafico', graph.data, graph.layout);
-            });
-        }
-    </script>
+    {% endif %}
+
+    {% if grafico %}
+    <div class="graph">
+        <h2>Gráfico:</h2>
+        {{ grafico|safe }}
+    </div>
+    {% endif %}
 </body>
 </html>
