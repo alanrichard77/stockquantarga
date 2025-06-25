@@ -1,55 +1,137 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ARGA Quant</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>ARGA QUANT PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-            font-family: 'Roboto', sans-serif;
-            color: #fff;
-            padding: 20px;
+            background: linear-gradient(120deg, #141e30, #243b55);
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: #eee;
+            margin: 0; padding: 0;
         }
-        input, select, button {
-            padding: 10px;
-            margin: 5px;
+        .top-bar {
+            background: #161b26;
+            padding: 18px 24px;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            border-bottom: 2px solid #244477;
+        }
+        .tabs {
+            display: flex;
+            background: #222c3b;
+            border-bottom: 2px solid #244477;
+        }
+        .tab {
+            padding: 16px 32px;
+            cursor: pointer;
+            color: #90caf9;
+            font-size: 17px;
+            font-weight: 700;
+            transition: 0.2s;
+            border: none;
+            background: none;
+        }
+        .tab.selected {
+            color: #fff;
+            border-bottom: 4px solid #2196f3;
+            background: #222c3b;
+        }
+        .input-row {
+            display: flex;
+            gap: 18px;
+            background: #172131;
+            padding: 22px;
+            align-items: center;
+        }
+        input, select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #274e6a;
+            font-size: 15px;
+            background: #101621;
+            color: #b2cdfc;
+        }
+        button {
+            padding: 10px 24px;
             border-radius: 6px;
             border: none;
-            font-size: 16px;
+            background: linear-gradient(120deg, #1e73be, #246df7);
+            color: #fff;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            margin-left: 16px;
+            box-shadow: 0 2px 6px #222c3b80;
+            transition: 0.18s;
         }
-        .result, .graph {
-            margin-top: 20px;
+        button:hover {
+            background: linear-gradient(120deg, #2196f3, #287fff);
         }
-        h1 { font-size: 24px; }
+        .results {
+            margin: 36px 0 0 0;
+            padding: 0 30px;
+        }
+        .card {
+            background: #1c2536;
+            margin: 20px 0;
+            padding: 28px 26px 16px 26px;
+            border-radius: 18px;
+            box-shadow: 0 6px 32px #0008;
+        }
+        .footer {
+            text-align: center;
+            color: #7db0ff;
+            margin-top: 40px;
+            font-size: 14px;
+            opacity: 0.6;
+            letter-spacing: 1px;
+            padding-bottom: 14px;
+        }
+        pre { color: #a5e6ff; }
+        @media (max-width: 800px) {
+            .input-row { flex-direction: column; align-items: stretch; }
+            .results { padding: 0 5vw; }
+        }
     </style>
 </head>
 <body>
-    <h1>ARGA Quant - Web App Financeiro</h1>
+    <div class="top-bar">ARGA QUANT PRO</div>
     <form method="post">
-        <input type="text" name="tickers" placeholder="Ex: PETR4,VALE3,WEGE3" required>
-        <input type="date" name="inicio" required>
-        <input type="date" name="fim" required>
-        <select name="tipo">
-            <option value="retorno">Retorno</option>
-            <option value="risco">Risco</option>
-            <option value="comparativo">Comparativo com IBOV</option>
-        </select>
-        <button type="submit">Calcular</button>
+        <div class="tabs">
+            <button class="tab {{ 'selected' if aba=='retorno' else '' }}" name="aba" value="retorno">Retorno</button>
+            <button class="tab {{ 'selected' if aba=='risco' else '' }}" name="aba" value="risco">Risco</button>
+            <button class="tab {{ 'selected' if aba=='comparativo' else '' }}" name="aba" value="comparativo">Comparativo IBOV</button>
+            <button class="tab {{ 'selected' if aba=='capm' else '' }}" name="aba" value="capm">CAPM</button>
+            <button class="tab {{ 'selected' if aba=='otimizacao' else '' }}" name="aba" value="otimizacao">Otimização</button>
+        </div>
+        <div class="input-row">
+            <label>Tickers: <input type="text" name="tickers" value="{{ tickers }}"></label>
+            <label>Data início: <input type="date" name="inicio" value="{{ inicio }}"></label>
+            <label>Data fim: <input type="date" name="fim" value="{{ fim }}"></label>
+            <label>Valor inicial (só portfólio): <input type="number" name="valor_inicial" value="{{ valor_inicial }}"></label>
+            <button type="submit">Calcular</button>
+        </div>
     </form>
 
-    {% if resultado %}
-    <div class="result">
-        <h2>Resultado:</h2>
-        <pre>{{ resultado }}</pre>
-    </div>
-    {% endif %}
+    <div class="results">
+        {% if resultado %}
+        <div class="card">
+            <h2>Resultados:</h2>
+            <pre>{{ resultado | tojson(indent=2) }}</pre>
+        </div>
+        {% endif %}
 
-    {% if grafico %}
-    <div class="graph">
-        <h2>Gráfico:</h2>
-        {{ grafico|safe }}
+        {% if grafico %}
+        <div class="card">
+            <h2>Gráfico:</h2>
+            {{ grafico|safe }}
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
+    <div class="footer">
+        ARGA QUANT PRO – Todos os direitos reservados – 2025
+    </div>
 </body>
 </html>
