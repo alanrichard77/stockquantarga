@@ -8,7 +8,6 @@
             background: linear-gradient(120deg, #141e30, #243b55);
             font-family: 'Montserrat', Arial, sans-serif;
             color: #eee;
-            margin: 0; padding: 0;
         }
         .top-bar {
             background: #161b26;
@@ -100,38 +99,4 @@
     <div class="top-bar">ARGA QUANT PRO</div>
     <form method="post">
         <div class="tabs">
-            <button class="tab {{ 'selected' if aba=='retorno' else '' }}" name="aba" value="retorno">Retorno</button>
-            <button class="tab {{ 'selected' if aba=='risco' else '' }}" name="aba" value="risco">Risco</button>
-            <button class="tab {{ 'selected' if aba=='comparativo' else '' }}" name="aba" value="comparativo">Comparativo IBOV</button>
-            <button class="tab {{ 'selected' if aba=='capm' else '' }}" name="aba" value="capm">CAPM</button>
-            <button class="tab {{ 'selected' if aba=='otimizacao' else '' }}" name="aba" value="otimizacao">Otimização</button>
-        </div>
-        <div class="input-row">
-            <label>Tickers: <input type="text" name="tickers" value="{{ tickers }}"></label>
-            <label>Data início: <input type="date" name="inicio" value="{{ inicio }}"></label>
-            <label>Data fim: <input type="date" name="fim" value="{{ fim }}"></label>
-            <label>Valor inicial (só portfólio): <input type="number" name="valor_inicial" value="{{ valor_inicial }}"></label>
-            <button type="submit">Calcular</button>
-        </div>
-    </form>
-
-    <div class="results">
-        {% if resultado %}
-        <div class="card">
-            <h2>Resultados:</h2>
-            <pre>{{ resultado | tojson(indent=2) }}</pre>
-        </div>
-        {% endif %}
-
-        {% if grafico %}
-        <div class="card">
-            <h2>Gráfico:</h2>
-            {{ grafico|safe }}
-        </div>
-        {% endif %}
-    </div>
-    <div class="footer">
-        ARGA QUANT PRO – Todos os direitos reservados – 2025
-    </div>
-</body>
-</html>
+            <button class="tab {{ 'selected' if aba=='retorno' else '' }}" name="aba" value
