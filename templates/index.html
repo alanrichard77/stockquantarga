@@ -99,4 +99,38 @@
     <div class="top-bar">ARGA QUANT PRO</div>
     <form method="post">
         <div class="tabs">
-            <button class="tab {{ 'selected' if aba=='retorno' else '' }}" name="aba" value
+            <button class="tab {{ 'selected' if aba=='retorno' else '' }}" name="aba" value="retorno" type="submit">Retorno</button>
+            <button class="tab {{ 'selected' if aba=='risco' else '' }}" name="aba" value="risco" type="submit">Risco</button>
+            <button class="tab {{ 'selected' if aba=='comparativo' else '' }}" name="aba" value="comparativo" type="submit">Comparativo IBOV</button>
+            <button class="tab {{ 'selected' if aba=='capm' else '' }}" name="aba" value="capm" type="submit">CAPM</button>
+            <button class="tab {{ 'selected' if aba=='otimizacao' else '' }}" name="aba" value="otimizacao" type="submit">Otimização</button>
+        </div>
+        <div class="input-row">
+            <label>Tickers: <input type="text" name="tickers" value="{{ tickers }}" required></label>
+            <label>Data início: <input type="date" name="inicio" value="{{ inicio }}" required></label>
+            <label>Data fim: <input type="date" name="fim" value="{{ fim }}" required></label>
+            <label>Valor inicial (só portfólio): <input type="number" name="valor_inicial" value="{{ valor_inicial }}" required></label>
+            <button type="submit">Calcular</button>
+        </div>
+    </form>
+
+    <div class="results">
+        {% if resultado %}
+        <div class="card">
+            <h2>Resultados:</h2>
+            <pre>{{ resultado | tojson(indent=2) }}</pre>
+        </div>
+        {% endif %}
+
+        {% if grafico %}
+        <div class="card">
+            <h2>Gráfico:</h2>
+            {{ grafico|safe }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="footer">
+        ARGA QUANT PRO – Todos os direitos reservados – 2025
+    </div>
+</body>
+</html>
